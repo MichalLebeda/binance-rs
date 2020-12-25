@@ -8,10 +8,13 @@ use crate::client::*;
 
 static API_HOST: &str = "https://api.binance.com";
 static FAPI_HOST: &str = "https://fapi.binance.com";
+static TESTNET_API_HOST: &str = "https://testnet.binance.vision";
 
 //#[derive(Clone)]
 pub trait Binance {
     fn new(api_key: Option<String>, secret_key: Option<String>) -> Self;
+
+    fn new_testnet(api_key: Option<String>, secret_key: Option<String>) -> Self;
 }
 
 impl Binance for General {
@@ -20,12 +23,25 @@ impl Binance for General {
             client: Client::new(api_key, secret_key, API_HOST.to_string()),
         }
     }
+
+    fn new_testnet(api_key: Option<String>, secret_key: Option<String>) -> General {
+        General {
+            client: Client::new(api_key, secret_key, TESTNET_API_HOST.to_string()),
+        }
+    }
 }
 
 impl Binance for Account {
     fn new(api_key: Option<String>, secret_key: Option<String>) -> Account {
         Account {
             client: Client::new(api_key, secret_key, API_HOST.to_string()),
+            recv_window: 5000,
+        }
+    }
+
+    fn new_testnet(api_key: Option<String>, secret_key: Option<String>) -> Account {
+        Account {
+            client: Client::new(api_key, secret_key, TESTNET_API_HOST.to_string()),
             recv_window: 5000,
         }
     }
@@ -38,12 +54,26 @@ impl Binance for Market {
             recv_window: 5000,
         }
     }
+
+    fn new_testnet(api_key: Option<String>, secret_key: Option<String>) -> Market {
+        Market {
+            client: Client::new(api_key, secret_key, TESTNET_API_HOST.to_string()),
+            recv_window: 5000,
+        }
+    }
 }
 
 impl Binance for UserStream {
     fn new(api_key: Option<String>, secret_key: Option<String>) -> UserStream {
         UserStream {
             client: Client::new(api_key, secret_key, API_HOST.to_string()),
+            recv_window: 5000,
+        }
+    }
+
+    fn new_testnet(api_key: Option<String>, secret_key: Option<String>) -> UserStream {
+        UserStream {
+            client: Client::new(api_key, secret_key, TESTNET_API_HOST.to_string()),
             recv_window: 5000,
         }
     }
@@ -59,6 +89,10 @@ impl Binance for FuturesGeneral {
             client: Client::new(api_key, secret_key, FAPI_HOST.to_string()),
         }
     }
+
+    fn new_testnet(api_key: Option<String>, secret_key: Option<String>) -> FuturesGeneral {
+        unimplemented!();
+    }
 }
 
 impl Binance for FuturesMarket {
@@ -67,5 +101,9 @@ impl Binance for FuturesMarket {
             client: Client::new(api_key, secret_key, FAPI_HOST.to_string()),
             recv_window: 5000,
         }
+    }
+
+    fn new_testnet(api_key: Option<String>, secret_key: Option<String>) -> FuturesMarket {
+        unimplemented!();
     }
 }
